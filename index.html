@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Message Generator</title>
+  </head>
+  <body>
+    <h2>Message Generator</h2>
+    <p>Detail description is on my blog: <a href="" target="_blank"></a></p>
+    <label for="message">Message Template:</label><br />
+    <textarea id="message" rows="15" cols="80">
+Ahoj <name>, 👋
+
+Rád bych Tě pozval do naší komunity na whats appu. Chtěl bych, aby to byl prostor, skrze který budu moci sdílet rychle informace a budeme se moci propojovat navzájem. Pokud se chceš připojit, klikni na odkaz níže.
+
+ > type_link
+
+Měj hezký den
+Petr
+         </textarea
+    ><br /><br />
+
+    <label for="contacts">Contacts List:</label><br />
+    <textarea id="contacts" rows="15" cols="80">
+phone_number; name
++420123456789; Petře
++420987654321; Ludmilo
+</textarea
+    ><br /><br />
+
+    <button onclick="generateFile()">Generate File</button>
+
+    <script>
+      function generateFile() {
+        const messageTemplate = document.getElementById("message").value;
+        const contactsText = document.getElementById("contacts").value;
+
+        const lines = contactsText.split("\n");
+        let output = "";
+
+        lines.forEach((line) => {
+          let [phone, name] = line.split(";");
+          if (phone && name) {
+            phone = phone.trim();
+            name = name.trim();
+            let personalizedMessage = messageTemplate.replace(/<name>/g, name);
+            output += `${phone};${personalizedMessage.replace(/\n/g, " ")}\n`;
+          }
+        });
+
+        const blob = new Blob([output], { type: "text/csv" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "message_task.csv";
+        link.click();
+      }
+    </script>
+  </body>
+</html>
